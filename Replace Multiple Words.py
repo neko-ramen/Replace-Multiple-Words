@@ -74,19 +74,19 @@ def startRplace():
         )
         count = 0
 
-        #置換件数をカウント
-        for key,value in dic.items():
-            for par in dc.paragraphs:
-                word = par.text
-                count += word.count(key)
-
         if output_file:
-            #ディクショナリを元に単語を置換
-            for key, value in dic.items():
-                for paragraph in dc.paragraphs:
-                    paragraph.text = paragraph.text.replace(key, value)
+            #置換件数をカウント
+            for key,value in dic.items():
+                for par in dc.paragraphs:
+                    word = par.text
+                    count += word.count(key)
 
             if count > 0:
+                #ディクショナリを元に単語を置換
+                for key, value in dic.items():
+                    for paragraph in dc.paragraphs:
+                        paragraph.text = paragraph.text.replace(key, value)
+
                 #ワードを保存
                 dc.save(output_file)
                 messagebox.showinfo("Success", "完了しました！\n"+"置換件数："+str(count))
