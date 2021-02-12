@@ -79,23 +79,26 @@ def startRplace():
         count = 0
 
         if output_file:
-            #置換件数をカウント
-            for key,value in dic.items():
-                for par in dc.paragraphs:
-                    word = par.text
-                    count += word.count(key)
+            try:
+                #置換件数をカウント
+                for key,value in dic.items():
+                    for par in dc.paragraphs:
+                        word = par.text
+                        count += word.count(key)
 
-            if count > 0:
-                #ディクショナリを元に単語を置換
-                for key, value in dic.items():
-                    for paragraph in dc.paragraphs:
-                        paragraph.text = paragraph.text.replace(key, value)
+                if count > 0:
+                    #ディクショナリを元に単語を置換
+                    for key, value in dic.items():
+                        for paragraph in dc.paragraphs:
+                            paragraph.text = paragraph.text.replace(key, value)
 
-                #ワードを保存
-                dc.save(output_file)
-                messagebox.showinfo("Success", "完了しました！\n"+"置換件数："+str(count))
-            else:
-                messagebox.showinfo("Message", "置換対象の単語はありませんでした")
+                    #ワードを保存
+                    dc.save(output_file)
+                    messagebox.showinfo("Success", "完了しました！\n"+"置換件数："+str(count))
+                else:
+                    messagebox.showinfo("Message", "置換対象の単語はありませんでした")
+            except:
+                messagebox.showerror("Error", "エラーが発生したため、処理を中断しました。")
         else:
             messagebox.showerror("Error", "保存先とファイル名を設定してください")
 
