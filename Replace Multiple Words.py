@@ -18,7 +18,7 @@ def openList():
     if list_path:
         list_filepath.set(list_path)
         #エクセルの読み込み
-        wb = px.load_workbook(filename=list_path)
+        wb = px.load_workbook(filename=list_path, data_only=True)
         ws = wb.active
         
         #検索する文字列リストの作成（空白行はエラー）
