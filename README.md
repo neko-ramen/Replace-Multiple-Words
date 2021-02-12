@@ -16,11 +16,11 @@ ExcelのA列を「検索する文字列」、B列を「置換後の文字列」�
 * Excelに数式が入っている場合は、値が読み取られます。
 
 # 使用したライブラリ
-* tkinter\n
+* tkinter
 https://docs.python.org/3/library/tkinter.html
-* openpyxl\n
-`pip install openpyxl`\n
+* openpyxl
+`pip install openpyxl`
 https://pypi.org/project/openpyxl/
-* python-docx\n
-`pip install python-docx`\n
+* python-docx
+`pip install python-docx`
 https://pypi.org/project/python-docx/
