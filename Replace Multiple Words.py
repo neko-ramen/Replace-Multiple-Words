@@ -90,7 +90,12 @@ def startRplace():
                     #ディクショナリを元に単語を置換
                     for key, value in dic.items():
                         for paragraph in dc.paragraphs:
-                            paragraph.text = paragraph.text.replace(key, value)
+                            if key in paragraph.text:
+                                inline = paragraph.runs
+                                for i in range(len(inline)):
+                                    if key in inline[i].text:
+                                        text = inline[i].text.replace(key, value)
+                                        inline[i].text = text
 
                     #ワードを保存
                     dc.save(output_file)
