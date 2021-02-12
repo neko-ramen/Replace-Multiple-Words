@@ -21,22 +21,26 @@ def openList():
         wb = px.load_workbook(filename=list_path)
         ws = wb.active
         
-        #検索する文字列リストの作成（空白行は無視）
+        #検索する文字列リストの作成（空白行はエラー）
         source_words = []
         max=ws.max_row
         for cell in ws.iter_rows(max_row=max):
             for cell in ws['A']:
                 if cell.value is None:
-                    continue
+                    messagebox.showerror("Error", "空白のセルが検出されたため、リストを読み込めませんでした。\nリストを確認して修正してください。")
+                    list_filepath.set("")
+                    return
                 source_words.append(cell.value)
         
-        #置換後の文字列リストの作成（空白行は無視）
+        #置換後の文字列リストの作成（空白行はエラー）
         target_words = []
         max=ws.max_row
         for cell in ws.iter_rows(max_row=max):
             for cell in ws['B']:
                 if cell.value is None:
-                    continue
+                    messagebox.showerror("Error", "空白のセルが検出されたため、リストを読み込めませんでした。\nリストを確認して修正してください。")
+                    list_filepath.set("")
+                    return
                 target_words.append(cell.value)
 
         #置換用ディクショナリの作成
@@ -45,7 +49,7 @@ def openList():
 
     else:
         list_filepath.set("")
-        messagebox.showerror("Error", "単語リストを設定してください")
+        messagebox.showinfo("Message", "単語リストを設定してください")
 
 def openTarget():
     target_path = fd.askopenfilename(filetypes=[('Word','*.docx')])
@@ -58,7 +62,7 @@ def openTarget():
 
     else:
         target_filepath.set("")
-        messagebox.showerror("Error", "対象ファイルを設定してください")
+        messagebox.showinfo("Message", "対象ファイルを設定してください")
 
 def startRplace():
     #入力ボックスのチェック
