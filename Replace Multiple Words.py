@@ -3,6 +3,7 @@ import openpyxl as px
 import tkinter as tk
 import tkinter.filedialog as fd
 from tkinter import messagebox
+import paragraph
 
 #ウィンドウの準備
 main_win = tk.Tk()
@@ -82,16 +83,16 @@ def startRplace():
             try:
                 #置換件数をカウント
                 for key,value in dic.items():
-                    for par in dc.paragraphs:
-                        word = par.text
+                    for para in dc.paragraphs:
+                        word = para.text
                         count += word.count(key)
 
                 if count > 0:
                     #ディクショナリを元に単語を置換
                     for key, value in dic.items():
-                        for paragraph in dc.paragraphs:
-                            if key in paragraph.text:
-                                inline = paragraph.runs
+                        for para in dc.paragraphs:
+                            if key in para.text:
+                                inline = para.runs
                                 for i in range(len(inline)):
                                     if key in inline[i].text:
                                         text = inline[i].text.replace(key, value)
