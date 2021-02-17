@@ -21,7 +21,6 @@ ExcelのA列を「検索する文字列」、B列を「置換後の文字列」�
 https://docs.python.org/3/library/tkinter.html
 * openpyxl
 `pip install openpyxl`
-https://pypi.org/project/openpyxl/
 * python-docx
 `pip install python-docx`
 https://pypi.org/project/python-docx/
