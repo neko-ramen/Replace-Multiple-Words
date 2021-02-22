@@ -27,3 +27,11 @@ https://docs.python.org/3/library/tkinter.html
 * python-docx
 `pip install python-docx`
 https://pypi.org/project/python-docx/
+
+## Open Source Licenses
+* tkinter  
+https://docs.python.org/3/license.html
+* openpyxl  
+https://foss.heptapod.net/openpyxl/openpyxl/-/blob/branch/3.0/LICENCE.rst
+* python-docx  
+https://github.com/python-openxml/python-docx/blob/master/LICENSE
