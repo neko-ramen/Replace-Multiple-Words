@@ -91,13 +91,66 @@ def startRplace():
                     #ディクショナリを元に単語を置換
                     for key, value in dic.items():
                         for para in dc.paragraphs:
-                            if key in para.text:
-                                inline = para.runs
-                                for i in range(len(inline)):
-                                    if key in inline[i].text:
-                                        text = inline[i].text.replace(key, value)
-                                        inline[i].text = text
+                            # ここから先、スペース区切りの用語も変更可能にするためにロジックを変更
+                            found_pos = -1
+                            key_count = para.text.count(key)
+                            for _ in range(key_count):
+                                # paragraphの中にキー（置換元）が何回出現するかを確認し、
+                                # 出現回数分だけ置換処理を行う
+                                #
+                                # 以下、置換処理
+                                # paragraph内でキーの開始位置とキーの終了位置を算出し、
+                                # その位置情報を元にキーが含まれているrunを抽出する
+                                # キーは複数のrunにまたがって存在する場合がある
+                                # （スペース区切りの用語など）ためリストに抽出するようにする
+                                found_pos = para.text.find(key, found_pos + 1)
+                                if found_pos < 0: break
+                                key_end_pos = found_pos + len(key) - 1
+                                partial_para_text = ""
+                                partial_runs = []
+                                for run in para.runs:
+                                    partial_para_text += run.text
+                                    current_pos = len(partial_para_text) - 1
+                                    if current_pos >= found_pos and current_pos < key_end_pos:
+                                        partial_runs.append(run)
+                                    elif current_pos >= key_end_pos:
+                                        partial_runs.append(run)
+                                        break
+                                # 抽出した run のリストのテキストをすべてつなげる。
+                                partial_runs_text = ""
+                                for run in partial_runs:
+                                    partial_runs_text = partial_runs_text + run.text
 
+                                # 文章の途中にキーが含まれている場合は、キーだけではなく
+                                # 前後の文も含まれている可能性があるため、
+                                # つなげたテキストの中から、
+                                # - キーより前の文
+                                # - キー
+                                # - キーより後の文
+                                # を、それぞれの位置を割り出す。
+                                key_start_pos = partial_runs_text.find(key)
+                                after_key_start_pos = len(partial_runs_text) - (key_start_pos + len(key))
+                                if len(partial_runs) < 2:
+                                    # 抽出した run が 1つだけだった場合の置換処理
+                                    #
+                                    # キーより前の文 + 置換後のテキスト + キーより後の文
+                                    # で結合したテキストをrun.textに設定する
+                                    run = partial_runs[0]
+                                    run.text = run.text[:key_start_pos] + value + run.text[len(run.text) - after_key_start_pos:]
+                                else:
+                                    # 抽出した run が 2つ以上だった場合の置換処理
+                                    #
+                                    # - 抽出した最後の run にキーの一部分が含まれている場合は、その部分を削除してrun.textに設定する
+                                    run = partial_runs.pop(-1)
+                                    run.text = run.text[len(run.text)-after_key_start_pos:]
+
+                                    # - 抽出した最初の run に、『キーより前の文 + 置換後のテキスト』で結合したテキストをrun.textに設定する
+                                    run = partial_runs.pop(0)
+                                    run.text = run.text[:key_start_pos] + value
+
+                                    # - 抽出した最後の run でも最初の run でもない run は、run.text を空文字にした上でリストから削除する
+                                    for i in reversed(range(len(partial_runs))):
+                                        para._p.remove(partial_runs[i]._r)
                     #ワードを保存
                     dc.save(output_file)
                     messagebox.showinfo("Success", "完了しました！\n"+"置換件数："+str(count))
